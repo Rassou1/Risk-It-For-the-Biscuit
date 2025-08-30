@@ -10,13 +10,13 @@ public class ReturnToGame : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        returnButton.onClick.AddListener(ReturnToMainGame);
     }
 
     // Update is called once per frame
     void Update()
     {
-        returnButton.onClick.AddListener(ReturnToMainGame);
+        
     }
 
     void ReturnToMainGame()
