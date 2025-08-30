@@ -21,6 +21,6 @@ public class ReturnToGame : MonoBehaviour
 
     void ReturnToMainGame()
     {
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
