@@ -17,10 +17,12 @@ public class RussianRoulette : MonoBehaviour
     [SerializeField]
     Button lowerButton;
 
+    GameObject player;
+    PlayerStats playerStats;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        moneyIn = 100;
         playButton.onClick.AddListener(PlayGame);
         lowerButton.onClick.AddListener(LowerNumber);
         raiseButton.onClick.AddListener(RaiseNumber);
@@ -32,6 +34,12 @@ public class RussianRoulette : MonoBehaviour
         
     }
 
+    private void Awake()
+    {
+        player = GameObject.Find("Player");
+        playerStats = player.GetComponent<PlayerStats>();
+    }
+
     void SetMultiplier()
     {
         multiplier = 1 + (0.15 * bulletCount);
@@ -41,17 +49,20 @@ public class RussianRoulette : MonoBehaviour
     {
         moneyOut = (int)(multiplier * moneyIn);
         Debug.Log("Win");
+        playerStats.money = moneyOut;
     }
 
     void Lose()
     {
         moneyOut = 0;
         Debug.Log("Lose");
+        playerStats.money = moneyOut;
     }
 
     void PlayGame()
     {
         SetMultiplier();
+        moneyIn = playerStats.money;
         System.Random rng = new System.Random();
         if(rng.Next(0, 6) < bulletCount)
         {
