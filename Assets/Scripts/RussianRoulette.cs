@@ -1,14 +1,17 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RussianRoulette : MonoBehaviour
 {
 
     int bulletCount = 1;
-    int moneyIn;
+    public int moneyIn;
     int moneyOut;
     double multiplier;
+
+    public TMP_InputField amountInput;
 
     [SerializeField]
     Button playButton;
@@ -26,6 +29,8 @@ public class RussianRoulette : MonoBehaviour
         playButton.onClick.AddListener(PlayGame);
         lowerButton.onClick.AddListener(LowerNumber);
         raiseButton.onClick.AddListener(RaiseNumber);
+        
+        amountInput.onValueChanged.AddListener(delegate { InputBetValue(amountInput); });
     }
 
     // Update is called once per frame
@@ -45,24 +50,35 @@ public class RussianRoulette : MonoBehaviour
         multiplier = 1 + (0.15 * bulletCount);
     }
 
+    void InputBetValue(TMP_InputField input)
+    {
+        moneyIn = int.Parse(input.text);
+    }
+
     void Win()
     {
         moneyOut = (int)(multiplier * moneyIn);
         Debug.Log("Win");
-        playerStats.money = moneyOut;
+        playerStats.money += moneyOut;
     }
 
     void Lose()
     {
         moneyOut = 0;
         Debug.Log("Lose");
-        playerStats.money = moneyOut;
+        playerStats.money += moneyOut;
     }
 
     void PlayGame()
     {
+        if (moneyIn > playerStats.money)
+        {
+            Debug.Log("bet 2 much </3");
+            return;
+        }
+
         SetMultiplier();
-        moneyIn = playerStats.money;
+        playerStats.money -= moneyIn;
         System.Random rng = new System.Random();
         if(rng.Next(0, 6) < bulletCount)
         {
